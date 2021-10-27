@@ -23,4 +23,6 @@
             'theme_location' => 'primary_menu',
         ) );
 ?>
+<?php echo get_search_form() ?>
+
     <p>This is the header Section</p>

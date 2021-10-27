@@ -42,6 +42,10 @@ add_theme_support( 'custom-background' );
 add_theme_support( 'custom-header' );
 add_theme_support( 'post-thumbnails' );
 add_theme_support( 'post-formats', array( 'aside', 'gallery','video','image' ) );
+function awesome_search() {
+    add_theme_support( 'html5', array( 'search-form' ) );
+}
+add_action( 'after_setup_theme', 'awesome_search' );
 
 /*
  ========================================
