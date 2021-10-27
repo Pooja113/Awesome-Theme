@@ -43,3 +43,20 @@ add_theme_support( 'custom-header' );
 add_theme_support( 'post-thumbnails' );
 add_theme_support( 'post-formats', array( 'aside', 'gallery','video','image' ) );
 
+/*
+ ========================================
+    Add Sidebar
+ ========================================
+ */
+function awesome_theme_widgets() {
+    register_sidebar( array(
+        'name'          => __( 'Custom Sidebar', 'textdomain' ),
+        'id'            => 'sidebar-1',
+        'description'   => __( 'Widgets in this area will be shown on all posts and pages.', 'textdomain' ),
+        'before_widget' => '<li id="%1$s" class="widget %2$s">',
+        'after_widget'  => '</li>',
+        'before_title'  => '<h2 class="widgettitle">',
+        'after_title'   => '</h2>',
+    ) );
+}
+add_action( 'widgets_init', 'awesome_theme_widgets' );
