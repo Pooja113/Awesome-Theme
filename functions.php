@@ -5,7 +5,7 @@
     Add Custom Menus
  ========================================
 */
-//add_theme_support( 'menus' );
+//add_theme_support( 'post-thumbnails' );
 
 if ( ! function_exists( 'awesometheme_register_nav_menu' ) ) {
  
@@ -31,4 +31,15 @@ function awesome_theme_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'awesome_theme_scripts' );
 
+
+/*
+ ========================================
+    Add Theme Support
+ ========================================
+*/
+
+add_theme_support( 'custom-background' );
+add_theme_support( 'custom-header' );
+add_theme_support( 'post-thumbnails' );
+add_theme_support( 'post-formats', array( 'aside', 'gallery','video','image' ) );
 
