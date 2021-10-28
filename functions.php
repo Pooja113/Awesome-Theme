@@ -193,10 +193,16 @@ function post_taxonomy_slug_array( $tax_name ) {
     if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
         $term_array = " ";
         foreach ( $terms as $term ) {
-            $term_array .= $term-> name . "<br> ";
+            $term_array .= '<a href="'.get_term_link($term) .'">'.$term->name.'</a><br>' ;
 
         }
         return $term_array;
     }
     return '';
 }
+
+
+function mytheme_custom_excerpt_length( $length ) {
+    return 10;
+}
+add_filter( 'excerpt_length', 'mytheme_custom_excerpt_length', 999 );
