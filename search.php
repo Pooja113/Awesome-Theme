@@ -16,11 +16,15 @@
              } // end if
             ?>
             </div>
-
+            <?php the_widget( 'WP_Widget_Recent_Posts'); ?> 
             <div class="col-xs-12 col-sm-4">
 
-                <?php get_sidebar();?>
+                <?php //get_sidebar();?>
+    <?php wp_list_categories( array(
+        'orderby' => 'name',
+    ) ); ?> 
 
             </div>
+            <?php the_widget( 'WP_Widget_Archives', 'dropdown=1' ); ?> 
     </div>
 <?php get_footer(); ?>
