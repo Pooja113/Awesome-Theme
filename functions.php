@@ -64,3 +64,11 @@ function awesome_theme_widgets() {
     ) );
 }
 add_action( 'widgets_init', 'awesome_theme_widgets' );
+
+/*
+ ========================================
+    Walker Class
+ ========================================
+ */
+
+require get_template_directory(). '/inc/walker.php';

@@ -21,6 +21,7 @@
 
     <?php wp_nav_menu( array(
             'theme_location' => 'primary_menu',
+           // 'walker' => new Walker_Nav_Primary(),
         ) );
 ?>
 <?php echo get_search_form() ?>
