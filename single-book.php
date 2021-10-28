@@ -8,10 +8,10 @@ Single Book page
                     the_post();  ?>
 <h1><?php the_title(); ?> </h1>
 <?php the_category();?><?php the_tags(); ?>
-<?php $cat = wp_get_post_terms( $post->ID, 'genre');
-foreach($cat as $a){
-    echo $a->name;
-} 
+<?php echo post_taxonomy_slug_array('genre');
+// foreach($cat as $a){
+//     echo $a->name;
+// } 
 ?>
      
      <?php if ( has_post_thumbnail() ) : ?>
