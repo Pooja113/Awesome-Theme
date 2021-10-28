@@ -72,3 +72,15 @@ add_action( 'widgets_init', 'awesome_theme_widgets' );
  */
 
 require get_template_directory(). '/inc/walker.php';
+
+/*
+ ========================================
+    Remove Version
+ ========================================
+ */
+
+function remove_version(){
+    return "" ;
+}
+
+add_filter('the_generator','remove_version');
