@@ -8,6 +8,11 @@ Single Book page
                     the_post();  ?>
 <h1><?php the_title(); ?> </h1>
 <?php the_category();?><?php the_tags(); ?>
+<?php $cat = wp_get_post_terms( $post->ID, 'genre');
+foreach($cat as $a){
+    echo $a->name;
+} 
+?>
      
      <?php if ( has_post_thumbnail() ) : ?>
         <a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
