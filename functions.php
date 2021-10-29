@@ -144,7 +144,11 @@ function wpdocs_codex_book_init() {
  
 add_action( 'init', 'wpdocs_codex_book_init' );
 
-
+/*
+ ========================================
+    Register Taxonomy
+ ========================================
+ */
 
 function wpdocs_create_book_taxonomies() {
     // Add new taxonomy, make it hierarchical (like categories)
@@ -201,8 +205,155 @@ function post_taxonomy_slug_array( $tax_name ) {
     return '';
 }
 
+/*
+ ========================================
+    Excerpt Length
+ ========================================
+ */ 
 
 function mytheme_custom_excerpt_length( $length ) {
     return 10;
 }
 add_filter( 'excerpt_length', 'mytheme_custom_excerpt_length', 999 );
+
+
+/*
+ ========================================
+    Custom Widgets
+ ========================================
+ */
+
+ class Awesome_Profile_Widget extends WP_Widget {
+
+    public function __construct(){
+        $widget_ops = array(
+            'classname'                   => 'widget_recent_entries',
+            'description'                 => __( 'Popular Posts Widgets' ),
+            // 'customize_selective_refresh' => true,
+            // 'show_instance_in_rest'       => true,
+        );
+        parent::__construct( 'popular-posts', __( 'Popular Posts' ), $widget_ops );
+        //$this->alt_option_name = 'widget_recent_entries';
+    }
+
+    public function widget( $args, $instance ){
+        if ( ! isset( $args['widget_id'] ) ) {
+            $args['widget_id'] = $this->id;
+        }
+ 
+        $default_title = __( 'Recent Posts' );
+        $title         = ( ! empty( $instance['title'] ) ) ? $instance['title'] : $default_title;
+ 
+        /** This filter is documented in wp-includes/widgets/class-wp-widget-pages.php */
+        $title = apply_filters( 'widget_title', $title, $instance, $this->id_base );
+ 
+        $number = ( ! empty( $instance['number'] ) ) ? absint( $instance['number'] ) : 5;
+        if ( ! $number ) {
+            $number = 5;
+        }
+        $show_date = isset( $instance['show_date'] ) ? $instance['show_date'] : false;
+ 
+        $r = new WP_Query(
+            apply_filters(
+                'widget_posts_args',
+                array(
+                    'posts_per_page'      => $number,
+                    'no_found_rows'       => true,
+                    'post_status'         => 'publish',
+                    'ignore_sticky_posts' => true,
+                ),
+                $instance
+            )
+        );
+ 
+        if ( ! $r->have_posts() ) {
+            return;
+        }
+        ?>
+ 
+        <?php echo $args['before_widget']; ?>
+ 
+        <?php
+        if ( $title ) {
+            echo $args['before_title'] . $title . $args['after_title'];
+        }
+ 
+        $format = current_theme_supports( 'html5', 'navigation-widgets' ) ? 'html5' : 'xhtml';
+ 
+        /** This filter is documented in wp-includes/widgets/class-wp-nav-menu-widget.php */
+        $format = apply_filters( 'navigation_widgets_format', $format );
+ 
+        if ( 'html5' === $format ) {
+            // The title may be filtered: Strip out HTML and make sure the aria-label is never empty.
+            $title      = trim( strip_tags( $title ) );
+            $aria_label = $title ? $title : $default_title;
+            echo '<nav role="navigation" aria-label="' . esc_attr( $aria_label ) . '">';
+        }
+        ?>
+ 
+        <ul>
+            <?php foreach ( $r->posts as $recent_post ) : ?>
+                <?php
+                $post_title   = get_the_title( $recent_post->ID );
+                $title        = ( ! empty( $post_title ) ) ? $post_title : __( '(no title)' );
+                $aria_current = '';
+ 
+                if ( get_queried_object_id() === $recent_post->ID ) {
+                    $aria_current = ' aria-current="page"';
+                }
+                ?>
+                <li>
+                    <a href="<?php the_permalink( $recent_post->ID ); ?>"<?php echo $aria_current; ?>><?php echo $title; ?></a>
+                    <?php if ( $show_date ) : ?>
+                        <span class="post-date"><?php echo get_the_date( '', $recent_post->ID ); ?></span>
+                    <?php endif; ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+ 
+        <?php
+        if ( 'html5' === $format ) {
+            echo '</nav>';
+        }
+ 
+        echo $args['after_widget'];
+    }
+
+
+    public function form( $instance ) {
+        $title     = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
+        $number    = isset( $instance['number'] ) ? absint( $instance['number'] ) : 5;
+        $show_date = isset( $instance['show_date'] ) ? (bool) $instance['show_date'] : false;
+        ?>
+        <p>
+            <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
+            <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
+        </p>
+ 
+        <p>
+            <label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of posts to show:' ); ?></label>
+            <input class="tiny-text" id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>" type="number" step="1" min="1" value="<?php echo $number; ?>" size="3" />
+        </p>
+ 
+        <p>
+            <input class="checkbox" type="checkbox"<?php checked( $show_date ); ?> id="<?php echo $this->get_field_id( 'show_date' ); ?>" name="<?php echo $this->get_field_name( 'show_date' ); ?>" />
+            <label for="<?php echo $this->get_field_id( 'show_date' ); ?>"><?php _e( 'Display post date?' ); ?></label>
+        </p>
+        <?php
+    }
+
+ }
+
+ add_action( 'widgets_init', function() {
+    register_widget( 'Awesome_Profile_Widget' );
+});
+
+
+function save_post_view(){
+    $metaKey = 'post_view';
+    $views =  get_post_meta($postID,$metaKey, true);
+
+    $count = (empty( $views) ? '0': $views);
+    $count++;
+    update_post_meta($postID,$metaKey, $count);
+}
