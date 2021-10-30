@@ -32,6 +32,7 @@ Single Book page
             echo "Sorry no comments";
 endif; ?>
 
+<li><span class="post-meta-key">Price:</span> <?php echo esc_html( get_post_meta( get_the_ID(), 'test12', true ) ); ?></li>
 
 <?php  	} // end while
              } // end if
