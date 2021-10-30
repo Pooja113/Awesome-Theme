@@ -21,9 +21,11 @@ Single Book page
     <?php endif; ?>
      
      <?php the_content(); ?> 
+     <li><span class="post-meta-key"></span> <?php echo esc_html( get_post_meta( get_the_ID(), 'wpdocs-meta-name', true ) ); ?></li>
 
      <?php previous_post_link('%link', '%title'); ?>
 <?php next_post_link('%link', '%title'); ?>
+
     <br>
     <br>
         <?php if ( comments_open() || get_comments_number() ) :
@@ -31,8 +33,6 @@ Single Book page
         else: 
             echo "Sorry no comments";
 endif; ?>
-
-<li><span class="post-meta-key">Price:</span> <?php echo esc_html( get_post_meta( get_the_ID(), 'test12', true ) ); ?></li>
 
 <?php  	} // end while
              } // end if
