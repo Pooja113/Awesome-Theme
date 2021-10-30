@@ -229,11 +229,8 @@ add_filter( 'excerpt_length', 'mytheme_custom_excerpt_length', 999 );
         $widget_ops = array(
             'classname'                   => 'widget_recent_entries',
             'description'                 => __( 'Popular Posts Widgets' ),
-            // 'customize_selective_refresh' => true,
-            // 'show_instance_in_rest'       => true,
         );
         parent::__construct( 'popular-posts', __( 'Popular Posts' ), $widget_ops );
-        //$this->alt_option_name = 'widget_recent_entries';
     }
 
     public function widget( $args, $instance ){
@@ -246,17 +243,22 @@ add_filter( 'excerpt_length', 'mytheme_custom_excerpt_length', 999 );
  
         /** This filter is documented in wp-includes/widgets/class-wp-widget-pages.php */
         $title = apply_filters( 'widget_title', $title, $instance, $this->id_base );
+        $posttype = ( ! empty( $instance['posttype'] ) ) ? absint( $instance['posttype'] ) : 'post';
+
  
         $number = ( ! empty( $instance['number'] ) ) ? absint( $instance['number'] ) : 5;
         if ( ! $number ) {
             $number = 5;
         }
+
         $show_date = isset( $instance['show_date'] ) ? $instance['show_date'] : false;
+
  
         $r = new WP_Query(
             apply_filters(
                 'widget_posts_args',
                 array(
+                    'post_type'            => $posttype,
                     'posts_per_page'      => $number,
                     'no_found_rows'       => true,
                     'post_status'         => 'publish',
@@ -323,13 +325,18 @@ add_filter( 'excerpt_length', 'mytheme_custom_excerpt_length', 999 );
     public function form( $instance ) {
         $title     = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
         $number    = isset( $instance['number'] ) ? absint( $instance['number'] ) : 5;
+        $posttype    = isset( $instance['posttype'] ) ? absint( $instance['posttype'] ) : 'post';
         $show_date = isset( $instance['show_date'] ) ? (bool) $instance['show_date'] : false;
         ?>
         <p>
             <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
             <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
         </p>
- 
+
+        <p>
+            <label for="<?php echo $this->get_field_id( 'posttype' ); ?>"><?php _e( 'Posttype:' ); ?></label>
+            <input class="widefat" id="<?php echo $this->get_field_id( 'posttype' ); ?>" name="<?php echo $this->get_field_name( 'posttype' ); ?>" type="text" value="<?php echo $posttype; ?>" />
+        </p>
         <p>
             <label for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of posts to show:' ); ?></label>
             <input class="tiny-text" id="<?php echo $this->get_field_id( 'number' ); ?>" name="<?php echo $this->get_field_name( 'number' ); ?>" type="number" step="1" min="1" value="<?php echo $number; ?>" size="3" />
