@@ -399,6 +399,32 @@ add_action( 'save_post', function( $post_id ) {
 //     return $content . $meta_val;
 // } );
 
+class WP_CustomNav_Menu_Widget extends WP_Widget {
+ 
+    /**
+     * Sets up a new Navigation Menu widget instance.
+     *
+     * @since 3.0.0
+     */
+    public function __construct() {
+        $widget_ops = array(
+            'description'                 => __( 'Add a navigation menu to your sidebar.' ),
+            'customize_selective_refresh' => true,
+            'show_instance_in_rest'       => true,
+        );
+        parent::__construct( 'nav_menu', __( 'Custom Navigation Menu' ), $widget_ops );
+    }
+    
 
+}    
 
-
+add_action( 'widgets_init', 'wpdocs_register_customnavwidgets' );
+ 
+/**
+ * Register the new widget.
+ *
+ * @see 'widgets_init'
+ */
+function wpdocs_register_customnavwidgets() {
+    register_widget( 'WP_CustomNav_Menu_Widget' );
+}
