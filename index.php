@@ -22,7 +22,7 @@
                 
                     <!-- the loop -->
                     <?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
-                        <h2><?php the_title(); ?></h2>
+                        <h2 class="post-title"><?php the_title(); ?></h2>
                         <?php the_excerpt(); ?>
                     <?php endwhile; ?>
                     <!-- end of the loop -->
@@ -57,3 +57,11 @@
             </div>
     </div>
 <?php get_footer(); ?>
+
+<script>
+    jQuery(document).ready(function(){
+        jQuery(".post-title").click(function(){
+            jQuery(this).next('p').toggle();
+        });
+    });
+    </script>
