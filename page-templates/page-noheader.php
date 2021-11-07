@@ -1,12 +1,14 @@
 <?php 
 /* 
-Template Name: About Template
+Template Name: No Header Template
 */ 
 ?>
 
-<?php get_header(); ?>
+<?php //get_header(); ?>
 
-<h1>About Us Page!!</h1>
+
+
+<h1>No Header Page</h1>
 <?php 
 if ( have_posts() ) {
 	while ( have_posts() ) {
