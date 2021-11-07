@@ -16,6 +16,8 @@ Single Page
     <?php endif; ?>
      
      <?php the_content(); ?> 
+     <?php echo get_post_meta( $post->ID, 'wpdocs-meta-post-text', true ); ?>     
+
 
      <?php previous_post_link('%link', '%title'); ?>
 <?php next_post_link('%link', '%title'); ?>
