@@ -375,45 +375,52 @@ function save_post_view(){
 
  //Register Meta box
 add_action( 'add_meta_boxes', function() {
-    add_meta_box( 'wpdocs-id', 'Social link', 'wpdocs_field_cb', 'book', 'normal' );
+    add_meta_box( 'wpdocs-id', 'Featured News', 'wpdocs_field_cb', 'post', 'normal' );
 } );
  
 //Meta callback function
 function wpdocs_field_cb( $post ) {
     wp_nonce_field( 'myplugin_inner_custom_box', 'myplugin_inner_custom_box_nonce' );
     $wpdocs_meta_val = get_post_meta( $post->ID, 'wpdocs-meta-name', true );
+    $wpdocs_checkbox_val = get_post_meta( $post->ID, 'wpdocs-checkbox', true );
     ?>
-     <input type="text" name="wpdocs-meta-name" value="<?php echo esc_attr( $wpdocs_meta_val ) ?>">
+    Do you want to make it a breaking news?  
+     <input type="checkbox" name="wpdocs-checkbox" value="<?php echo esc_attr( $wpdocs_checkbox_val ) ?>"><br>
+     Custom Header <input type="text" name="wpdocs-meta-name" value="<?php echo esc_attr( $wpdocs_meta_val ) ?>">
      <?php
  }
 
 //save meta value with save post hook
 add_action( 'save_post', function( $post_id ) {
+    if ( isset( $_POST['wpdocs-checkbox'] ) ) {
+        update_post_meta( $post_id, 'wpdocs-checkbox', $_POST['wpdocs-checkbox'] );
+    }
     if ( isset( $_POST['wpdocs-meta-name'] ) ) {
         update_post_meta( $post_id, 'wpdocs-meta-name', $_POST['wpdocs-meta-name'] );
     }
+
 } );
 
  //Register Meta box
- add_action( 'add_meta_boxes', function() {
-    add_meta_box( 'wpdocs-id', 'Post Text', 'wpdocs_field_post_cb', 'post', 'normal' );
-} );
+//  add_action( 'add_meta_boxes', function() {
+//     add_meta_box( 'wpdocs-id', 'Post Text', 'wpdocs_field_post_cb', 'post', 'normal' );
+// } );
  
-//Meta callback function
-function wpdocs_field_post_cb( $post ) {
-    wp_nonce_field( 'myplugin_inner_custom_box', 'myplugin_inner_custom_box_nonce' );
-    $wpdocs_meta_val = get_post_meta( $post->ID, 'wpdocs-meta-post-text', true );
-    ?>
-     <input type="text" name="wpdocs-meta-post-text" value="<?php echo esc_attr( $wpdocs_meta_val ) ?>">
+// //Meta callback function
+// function wpdocs_field_post_cb( $post ) {
+//     wp_nonce_field( 'myplugin_inner_custom_box', 'myplugin_inner_custom_box_nonce' );
+//     $wpdocs_meta_val = get_post_meta( $post->ID, 'wpdocs-meta-post-text', true );
+//    ?>
+<!-- //      <input type="text" name="wpdocs-meta-post-text" value="<?php //echo esc_attr( $wpdocs_meta_val ) ?>"> -->
      <?php
- }
+//  }
 
-//save meta value with save post hook
-add_action( 'save_post', function( $post_id ) {
-    if ( isset( $_POST['wpdocs-meta-post-text'] ) ) {
-        update_post_meta( $post_id, 'wpdocs-meta-post-text', $_POST['wpdocs-meta-post-text'] );
-    }
-} );
+// //save meta value with save post hook
+// add_action( 'save_post', function( $post_id ) {
+//     if ( isset( $_POST['wpdocs-meta-post-text'] ) ) {
+//         update_post_meta( $post_id, 'wpdocs-meta-post-text', $_POST['wpdocs-meta-post-text'] );
+//     }
+// } );
  
 //show meta value after post content
 // add_filter( 'get_post_metadata', function( $content ) {
